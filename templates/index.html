@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotherTime365</title>
+    
+    <!-- Barcha brauzerlar uchun 100% ko'rinadigan ona va bola Faviconi (Base64 formatida) -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0iJTIzMzQ5OGRiIj48cGF0aCBkPSJNMTIgMkM2LjQ4IDIgMiA2LjQ4IDIgMTJzNC40OCAxMCAxMCAxMCAxMC00LjQ4IDEwLTEwUzE3LjUyIDIgMTIgMnptLTEgNGMxLjEgMCAyIC45IDIgMnMtLjkgMi0yIDItMi0uOS0yLTJjMC0xLjEuOS0yIDItMnptMSAxMUg5di0yaDF2LTJIOXYtMmgzdjRoMXYyek0xNCA5Yy41NSAwIDEgLjQ1IDEgMXMtLjQ1IDEtMSAxYy0uNTUgMC0xLS40NS0xLTFzLjQ1LTEgMS0xeiIvPjwvc3ZnPg==">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Markaziy kontent bloki */
+        .main-card {
+            text-align: center;
+            max-width: 650px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 35px;
+        }
+
+        /* Ibora ustidagi maxsus da'vat matni */
+        .instruction-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: #7f8c8d;
+            letter-spacing: 0.5px;
+            background: rgba(255, 255, 255, 0.5);
+            padding: 8px 20px;
+            border-radius: 20px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            margin-bottom: -10px;
+        }
+
+        /* Yuqoridagi ibora */
+        .quote-text {
+            font-size: 32px;
+            font-weight: 600;
+            color: #2c3e50;
+            line-height: 1.5;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            word-wrap: break-word;
+        }
+
+        /* Tugma tepasidagi taymer bloki */
+        .timer-container {
+            font-size: 15px;
+            color: #34495e;
+            background: rgba(255, 255, 255, 0.3);
+            padding: 6px 16px;
+            border-radius: 15px;
+            font-weight: 500;
+            margin-bottom: -20px; /* Tugmaga yaqin turishi uchun */
+        }
+
+        #countdown {
+            font-weight: 700;
+            color: #e74c3c;
+            font-variant-numeric: tabular-nums; /* Raqamlar qimirlab ketmasligi uchun */
+        }
+
+        /* Tagroqdagi bajarildi tugmasi */
+        .action-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 16px 45px;
+            font-size: 18px;
+            font-weight: 600;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(52, 152, 219, 0.4);
+            transition: all 0.3s ease;
+            outline: none;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .action-btn:hover:not(:disabled) {
+            background: #2980b9;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(52, 152, 219, 0.5);
+        }
+
+        .action-btn:active:not(:disabled) {
+            transform: translateY(1px);
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .action-btn:disabled {
+            background: #95a5a6;
+            color: #bdc3c7;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* O'ng pastki burchakdagi GitHub tugmasi */
+        .github-link {
+            position: absolute;
+            bottom: 25px;
+            right: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #24292e;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            font-weight: 500;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
+        }
+
+        .github-link:hover {
+            background: #000000;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+        }
+
+        .github-icon {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-card">
+        <!-- Da'vat matni -->
+        <p class="instruction-text">Onangni beg'ubor ko'zlariga qarab shu so'zlarni ayt</p>
+
+        <!-- Markazda yuqorida ibora -->
+        <h1 class="quote-text">"{{ quote.text }}"</h1>
+
+        <!-- Yangi qo'shilgan qism: Keyingi iboragacha qolgan vaqt taymeri -->
+        <div class="timer-container">
+            Keyingi iboragacha: <span id="countdown">00:00:00</span> vaqt qoldi
+        </div>
+
+        <!-- Birmartalik bajarildi buyrug'i -->
+        <button class="action-btn" id="doneBtn">Bajarildi</button>
+    </div>
+
+    <!-- GitHub profil havolasi -->
+    <a href="https://github.com" target="_blank" class="github-link">
+        <svg class="github-icon" viewBox="0 0 16 16" version="1.1" aria-hidden="true">
+            <path fill-rule="evenodd" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"></path>
+        </svg>
+        quvonch007
+    </a>
+
+    <script>
+        const doneBtn = document.getElementById('doneBtn');
+        const countdownElement = document.getElementById('countdown');
+
+        // 1. Kun tartib raqamini aniqlash mantiqi
+        const now = new Date();
+        const start = new Date(now.getFullYear(), 0, 0);
+        const diff = now - start;
+        const oneDay = 1000 * 60 * 60 * 24;
+        const currentDayOfYear = Math.floor(diff / oneDay);
+
+        const lastClickedDay = localStorage.getItem('lastClickedDay');
+
+        if (lastClickedDay && parseInt(lastClickedDay) === currentDayOfYear) {
+            disableButton();
+        }
+
+        doneBtn.addEventListener('click', () => {
+            disableButton();
+            localStorage.setItem('lastClickedDay', currentDayOfYear);
+        });
+
+        function disableButton() {
+            doneBtn.disabled = true;
+            doneBtn.textContent = 'Bajarildi';
+        }
+
+        // 2. Jonli teskari taymer mantiqi (Yarim tungacha bo'lgan vaqt)
+        function updateTimer() {
+            const now = new Date();
+            
+            // Bugungi kunning oxiri (tungi 23:59:59)
+            const midnight = new Date();
+            midnight.setHours(24, 0, 0, 0);
+
+            const timeLeft = midnight - now; // millisekundlarda
+
+            if (timeLeft <= 0) {
+                countdownElement.textContent = "00:00:00";
+                // Kun almashganda tugmani qayta aktivlashtirish uchun sahifani yangilash
+                location.reload();
+                return;
+            }
+
+            // Soat, minut va sekundlarni hisoblash
+            const hours = Math.floor((timeLeft / (1000 * 60 * 60)) % 24);
+            const minutes = Math.floor((timeLeft / (1000 * 60)) % 60);
+            const seconds = Math.floor((timeLeft / 1000) % 60);
+
+            // Formatlash (har doim 2 xonali raqam ko'rsatish: 02:05:09)
+            const formattedTime = 
+                (hours < 10 ? "0" + hours : hours) + ":" + 
+                (minutes < 10 ? "0" + minutes : minutes) + ":" + 
+                (seconds < 10 ? "0" + seconds : seconds);
+
+            countdownElement.textContent = formattedTime;
+        }
+
+        // Taymerni har sekundda yangilab turish
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    </script>
+
+</body>
+</html>
